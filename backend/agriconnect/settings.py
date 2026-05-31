@@ -32,7 +32,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary_storage',
     'django.contrib.staticfiles',
+    'cloudinary',
     'core',  # Our main app
 ]
 
@@ -115,10 +117,19 @@ STATIC_ROOT = PROJECT_ROOT / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = PROJECT_ROOT / 'media'
 
-# WhiteNoise for static files in production
+# Cloudinary configuration for media file storage
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME', ''),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY', ''),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET', ''),
+}
+
+# Use Cloudinary for media uploads in production, local filesystem in development
+_USE_CLOUDINARY = bool(os.environ.get('CLOUDINARY_CLOUD_NAME', ''))
+
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage" if _USE_CLOUDINARY else "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
