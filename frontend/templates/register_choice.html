@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Role - AgriConnect</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+        /* Reset and Base Styles */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f5dc 0%, #f5f5dc 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+        /* Header Styles */
+        
+        header {
+            background: linear-gradient(135deg, #2d5a27 0%, #4a7c43 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo span {
+            color: #90ee90;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        /* Main Container */
+        
+        .choice-container {
+            min-height: calc(100vh - 80px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        
+        .choice-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+        
+        .choice-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #2D1F18;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .choice-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+        /* Role Selection Cards */
+        
+        .role-selection {
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 800px;
+        }
+        
+        .role-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2.5rem 2.5rem;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .role-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+        
+        .role-icon {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .role-card h2 {
+            color: #2d5a27;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .role-card p {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        .role-card .btn {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: block;
+            min-height: 50px;
+            line-height: 1.5;
+            white-space: nowrap;
+        }
+        
+        .btn-farmer {
+            background: linear-gradient(135deg, #4a7c43 0%, #2d5a27 100%);
+            color: white;
+        }
+        
+        .btn-farmer:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 124, 67, 0.4);
+        }
+        
+        .btn-restaurant {
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+            color: white;
+        }
+        
+        .btn-restaurant:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(230, 126, 34, 0.4);
+        }
+        /* Footer */
+        
+        footer {
+            background: rgba(0, 0, 0, 0.1);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: auto;
+        }
+        
+        footer p {
+            margin: 0.5rem 0;
+        }
+        
+        foot a {
+            color: #90ee90;
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+        /* Responsive */
+        
+        @media (max-width: 768px) {
+            .role-selection {
+                gap: 2rem;
+                flex-direction: column;
+                align-items: center;
+            }
+            .role-card {
+                width: 100%;
+                max-width: 350px;
+            }
+            .choice-header h1 {
+                font-size: 2rem;
+            }
+            nav ul {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            🌾 Agri<span>Connect</span>
+        </div>
+        <nav>
+            <ul>
+                <li class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}"><a href="{% url 'home' %}">Home</a></li>
+                <li class="{% if request.resolver_match.url_name == 'login' %}active{% endif %}"><a href="{% url 'login' %}">Login</a></li>
+                <li class="{% if request.resolver_match.url_name == 'register' %}active{% endif %}"><a href="{% url 'register' %}">Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Role Selection Container -->
+    <div class="choice-container">
+        <div class="choice-header">
+            <h1>Choose Your Role</h1>
+            <p style="color: #2D1F18;">Join AgriConnect and connect with the right community for your needs</p>
+        </div>
+
+        <div class="role-selection">
+            <!-- Farmer Card -->
+            <div class="role-card">
+                <div class="role-icon">👨‍🌾</div>
+                <h2>I'm a Farmer</h2>
+                <p>List your fresh produce and connect directly with restaurants looking for quality farm products.</p>
+                <a href="{% url 'register_farmer' %}" class="btn btn-farmer">🌱 Register as Farmer</a>
+            </div>
+
+            <!-- Restaurant Card -->
+            <div class="role-card">
+                <div class="role-icon">🍽️</div>
+                <h2>I'm a Restaurant</h2>
+                <p>Source fresh, quality produce directly from local farmers. Better freshness, better prices, better quality.</p>
+                <a href="{% url 'register_restaurant' %}" class="btn btn-restaurant">🍽️ Register as Restaurant</a>
+            </div>
+        </div>
+
+        <div style="margin-top: 3rem; text-align: center; color: white;">
+            <p style="color:#2D1F18">Already have an account? <a href="{% url 'login' %}" style="color: #90ee90; text-decoration: none; font-weight: 600;">Login here</a></p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>🌾 AgriConnect - Bridging Farmers and Restaurants | © 2026 All Rights Reserved</p>
+    </footer>
+</body>
+
+</html>

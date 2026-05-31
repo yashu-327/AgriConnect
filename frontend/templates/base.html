@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AgriConnect{% endblock %}</title>
+    {% load static %}
+    <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}"> {% block extra_css %}{% endblock %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        html,
+        body {
+            height: 100%;
+        }
+        
+        main {
+            min-height: calc(100vh - 60px);
+        }
+
+        .site-header {
+            background: linear-gradient(135deg, #2d5a27 0%, #4a7c43 100%);
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .site-logo {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .site-logo span {
+            color: #90ee90;
+        }
+
+        .site-nav ul {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .site-nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+            display: inline-block;
+        }
+
+        .site-nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .site-nav a.active {
+            background: transparent;
+            box-shadow: inset 0 -3px 0 #90ee90;
+        }
+
+        .site-nav .btn-profile,
+        .site-nav .btn-logout {
+            background: rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+        }
+
+        .site-nav .btn-profile:hover,
+        .site-nav .btn-logout:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .site-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .site-nav ul {
+                gap: 0.45rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <a class="site-logo" href="{% url 'home' %}">🌾 Agri<span>Connect</span></a>
+        <nav class="site-nav" aria-label="Main Navigation">
+            <ul>
+                {% if request.user.is_authenticated %}
+                    {% if request.user.is_farmer %}
+                        <li>
+                            <a href="{% url 'farmer_home' %}" class="{% if request.resolver_match.url_name == 'farmer_home' %}active{% endif %}">Home</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'farmer_dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' or request.resolver_match.url_name == 'farmer_dashboard' %}active{% endif %}">My Dashboard</a>
+                        </li>
+                    {% elif request.user.is_restaurant %}
+                        <li>
+                            <a href="{% url 'restaurant_home' %}" class="{% if request.resolver_match.url_name == 'restaurant_home' %}active{% endif %}">Home</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'restaurant_dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' or request.resolver_match.url_name == 'restaurant_dashboard' %}active{% endif %}">My Dashboard</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
+                        </li>
+                    {% endif %}
+                    <li><a href="#" class="btn-profile">👤 Profile ▼</a></li>
+                    <li><a href="{% url 'logout' %}" class="btn-logout">Logout</a></li>
+                {% else %}
+                    <li>
+                        <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'login' %}" class="{% if request.resolver_match.url_name == 'login' %}active{% endif %}">Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

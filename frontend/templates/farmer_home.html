@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Farmer Home - AgriConnect{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background: #f5f5dc;
+    }
+
+    .farmer-home {
+        max-width: 1100px;
+        margin: 2rem auto 3rem;
+        padding: 0 1rem;
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .hero-card {
+        background: linear-gradient(135deg, #eef9ea 0%, #dff0d7 100%);
+        border: 1px solid #c8e1bf;
+        border-left: 6px solid #2f6f2a;
+        border-radius: 18px;
+        padding: 2rem;
+        box-shadow: 0 10px 24px rgba(32, 74, 28, 0.09);
+    }
+
+    .hero-card h1 {
+        color: #1f561a;
+        font-size: clamp(1.8rem, 3vw, 2.5rem);
+        margin-bottom: 0.75rem;
+        line-height: 1.2;
+    }
+
+    .hero-card p {
+        color: #2f5f2b;
+        font-size: 1.05rem;
+        max-width: 760px;
+    }
+
+    .intro-card {
+        background: #ffffff;
+        border: 1px solid #d8e6d2;
+        border-radius: 14px;
+        padding: 1.2rem 1.3rem;
+        box-shadow: 0 6px 14px rgba(32, 74, 28, 0.06);
+    }
+
+    .intro-card p {
+        color: #425242;
+        line-height: 1.7;
+    }
+
+    .section-title {
+        color: #1f561a;
+        margin-bottom: 0.85rem;
+        font-size: 1.35rem;
+    }
+
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .feature-card {
+        background: #fff;
+        border: 1px solid #d8e6d2;
+        border-radius: 14px;
+        padding: 1.2rem;
+        box-shadow: 0 8px 18px rgba(32, 74, 28, 0.07);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 14px 22px rgba(32, 74, 28, 0.11);
+    }
+
+    .feature-icon {
+        font-size: 1.6rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .feature-card h3 {
+        color: #2d6028;
+        margin-bottom: 0.35rem;
+        font-size: 1.06rem;
+    }
+
+    .feature-card p {
+        color: #4f5f4f;
+        font-size: 0.95rem;
+    }
+
+    .actions-wrap {
+        background: #fff;
+        border: 1px solid #d8e6d2;
+        border-radius: 14px;
+        padding: 1.2rem;
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+    }
+
+    .action-btn {
+        border: none;
+        border-radius: 10px;
+        padding: 0.7rem 1.1rem;
+        text-decoration: none;
+        font-weight: 600;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 14px rgba(32, 74, 28, 0.15);
+    }
+
+    .action-primary {
+        background: #347b2e;
+        color: #fff;
+    }
+
+    .action-secondary {
+        background: #d9ecd3;
+        color: #2d6028;
+    }
+
+    .action-tertiary {
+        background: #f3f7ef;
+        color: #2d6028;
+        border: 1px solid #cfe0ca;
+    }
+
+    .benefits-wrap {
+        background: #ffffff;
+        border: 1px solid #d8e6d2;
+        border-radius: 14px;
+        padding: 1.2rem;
+    }
+
+    .benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.9rem;
+    }
+
+    .benefit-card {
+        background: #f8fcf5;
+        border: 1px solid #d6e5d0;
+        border-radius: 12px;
+        padding: 1rem;
+        transition: background 0.2s ease;
+    }
+
+    .benefit-card:hover {
+        background: #edf7e8;
+    }
+
+    .benefit-card h4 {
+        color: #2d6028;
+        margin-bottom: 0.3rem;
+        font-size: 1rem;
+    }
+
+    .benefit-card p {
+        color: #4f5f4f;
+        font-size: 0.93rem;
+    }
+
+    @media (max-width: 900px) {
+        .feature-grid,
+        .benefits-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="farmer-home">
+    <div class="hero-card">
+        <h1>Welcome to AgriConnect, {{ user.username }}!</h1>
+        <p>Showcase your fresh produce, connect with restaurants, and grow your farming business.</p>
+    </div>
+
+    <div class="intro-card">
+        <p>Farmers can list crops, manage supply requests, and connect directly with restaurants without middlemen.</p>
+    </div>
+
+    <section>
+        <h2 class="section-title">Farmer Features</h2>
+        <div class="feature-grid">
+            <article class="feature-card">
+                <div class="feature-icon">🌱</div>
+                <h3>Add New Produce</h3>
+                <p>Create listings for fresh crops with quantity and pricing details to attract buyers.</p>
+            </article>
+            <article class="feature-card">
+                <div class="feature-icon">🧺</div>
+                <h3>Manage Listings</h3>
+                <p>Keep your produce entries updated and maintain clear visibility of available stock.</p>
+            </article>
+            <article class="feature-card">
+                <div class="feature-icon">📬</div>
+                <h3>View Restaurant Requests</h3>
+                <p>Receive and respond to supply requests from restaurants in one organized place.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="actions-wrap">
+        <h2 class="section-title">Quick Actions</h2>
+        <div class="action-buttons">
+            <a class="action-btn action-primary" href="{% url 'farmer_dashboard' %}">Add Produce</a>
+            <a class="action-btn action-secondary" href="{% url 'farmer_dashboard' %}">Go to Dashboard</a>
+        </div>
+    </section>
+
+    <section class="benefits-wrap">
+        <h2 class="section-title">Why Farmers Use AgriConnect</h2>
+        <div class="benefits-grid">
+            <article class="benefit-card">
+                <h4>Better Profits</h4>
+                <p>Sell directly to restaurants and keep more value from every harvest.</p>
+            </article>
+            <article class="benefit-card">
+                <h4>Direct Restaurant Access</h4>
+                <p>Build long-term partnerships with local restaurants that need consistent supply.</p>
+            </article>
+            <article class="benefit-card">
+                <h4>Easy Product Listing</h4>
+                <p>List your produce quickly with a clean workflow that saves time during busy days.</p>
+            </article>
+        </div>
+    </section>
+</section>
+{% endblock %}

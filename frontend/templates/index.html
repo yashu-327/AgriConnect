@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriConnect - Farm to Restaurant Platform</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        /* Landing Page Specific Styles */
+        
+        .landing-hero {
+            background: linear-gradient(135deg, #2d5a27 0%, #4a7c43 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-top: 80px;
+        }
+        
+        header {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 180, 6, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo span {
+            color: #90ee90;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .hero-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .hero-content h1 {
+            color: white;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: slideDownFade 0.8s ease-out;
+        }
+        
+        .hero-content .tagline {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            margin-bottom: 3rem;
+            max-width: 700px;
+            animation: slideUpFade 0.8s ease-out 0.2s backwards;
+        }
+        /* Animations */
+        
+        @keyframes slideDownFade {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Comparison Section */
+        
+        .comparison-section {
+            background: #f5f5f5;
+            padding: 5rem 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .comparison-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: slideUpFade 0.8s ease-out;
+        }
+        
+        .comparison-header h2 {
+            font-size: 2.8rem;
+            color: #2d5a27;
+            margin-bottom: 1rem;
+        }
+        
+        .comparison-header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .flows-container {
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        /* Problem Flow */
+        
+        .flow-row {
+            margin-bottom: 4rem;
+            animation: slideUpFade 0.8s ease-out;
+        }
+        
+        .flow-label {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .problem-flow .flow-label {
+            color: #c0392b;
+        }
+        
+        .solution-flow .flow-label {
+            color: #27ae60;
+        }
+        
+        .flow-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .problem-flow .flow-diagram {
+            background: linear-gradient(135deg, rgba(192, 57, 43, 0.05) 0%, rgba(149, 165, 166, 0.05) 100%);
+            border: 2px solid rgba(192, 57, 43, 0.2);
+        }
+        
+        .solution-flow .flow-diagram {
+            background: linear-gradient(135deg, #e8f8f5 0%, #d4edda 100%);
+            border: 2px solid #27ae60;
+        }
+        
+        .flow-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 90px;
+            text-align: center;
+        }
+        
+        .flow-item-icon {
+            font-size: 3rem;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .problem-flow .flow-item-icon {
+            opacity: 0.6;
+            filter: grayscale(30%);
+        }
+        
+        .flow-item-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #333;
+            line-height: 1.3;
+        }
+        
+        .problem-flow .flow-item-label {
+            color: #555;
+        }
+        
+        .solution-flow .flow-item-label {
+            color: #2d5a27;
+        }
+        /* Platform Card in Solution */
+        
+        .platform-card {
+            background: white;
+            border: 2px solid #27ae60;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.15);
+            animation: glowPulse 2s ease-in-out infinite;
+            position: relative;
+        }
+        
+        .platform-card .flow-item-icon {
+            font-size: 2.5rem;
+        }
+        
+        .flow-arrow {
+            font-size: 2rem;
+            color: #666;
+            flex-shrink: 0;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .problem-flow .flow-arrow {
+            color: #c0392b;
+            opacity: 0.5;
+        }
+        
+        .solution-flow .flow-arrow {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .solution-flow .flow-arrow::after {
+            content: "→";
+            display: inline-block;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(5px);
+            }
+        }
+        /* CTA Section */
+        
+        .cta-section {
+            background: linear-gradient(135deg, #2d5a27 0%, #4a7c43 100%);
+            color: white;
+            padding: 5rem 2rem;
+            text-align: center;
+            animation: slideUpFade 0.8s ease-out;
+        }
+        
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-section p {
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-farmer {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+        }
+        
+        .btn-farmer:hover {
+            background: linear-gradient(135deg, #229954 0%, #1e8449 100%);
+        }
+        
+        .btn-restaurant {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+        }
+        
+        .btn-restaurant:hover {
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+        }
+        /* Features Section */
+        
+        .features-section {
+            background: #f5f5dc;
+            padding: 4rem 2rem;
+        }
+        
+        .features-section h2 {
+            text-align: center;
+            color: #2d5a27;
+            margin-bottom: 3rem;
+            font-size: 2rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-item .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-item h3 {
+            color: #2d5a27;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-item p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        /* Footer on landing */
+        
+        .landing-footer {
+            background: #1a3d17;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+        /* Responsive Design */
+        
+        @media (max-width: 1024px) {
+            .flow-diagram {
+                gap: 1rem;
+            }
+            .flow-item {
+                min-width: 75px;
+            }
+            .flow-item-icon {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+            .hero-content .tagline {
+                font-size: 1.1rem;
+            }
+            .comparison-header h2 {
+                font-size: 1.8rem;
+            }
+            .comparison-header p {
+                font-size: 1rem;
+            }
+            .flow-diagram {
+                gap: 0.8rem;
+                padding: 1.5rem;
+            }
+            .flow-item {
+                min-width: 60px;
+            }
+            .flow-item-icon {
+                font-size: 2rem;
+            }
+            .flow-item-label {
+                font-size: 0.75rem;
+            }
+            .flow-arrow {
+                font-size: 1.5rem;
+                min-width: 30px;
+            }
+            .platform-card {
+                padding: 0.75rem;
+            }
+            .platform-card .flow-item-icon {
+                font-size: 2rem;
+            }
+            nav ul {
+                gap: 1rem;
+            }
+            nav a {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+            .cta-section h2 {
+                font-size: 1.8rem;
+            }
+            .cta-buttons {
+                gap: 1rem;
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                padding: 0.9rem 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 1.8rem;
+            }
+            .comparison-section {
+                padding: 3rem 1rem;
+            }
+            .comparison-header h2 {
+                font-size: 1.5rem;
+            }
+            .flow-row {
+                margin-bottom: 2.5rem;
+            }
+            .flow-diagram {
+                gap: 0.5rem;
+                padding: 1rem;
+            }
+            .flow-item {
+                min-width: 50px;
+            }
+            .flow-item-icon {
+                font-size: 1.5rem;
+                min-height: 45px;
+            }
+            .flow-item-label {
+                font-size: 0.7rem;
+            }
+            .cta-section {
+                padding: 3rem 1rem;
+            }
+            .cta-section h2 {
+                font-size: 1.5rem;
+            }
+            .cta-section p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Hero Section -->
+    <section class="landing-hero">
+        <header>
+            <div class="logo">
+                🌾 Agri<span>Connect</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'register' %}">Register</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="hero-content">
+            <h1>🌾 Welcome to AgriConnect</h1>
+            <p class="tagline">Connecting Local Farmers Directly with Restaurants. Fresh Produce, Fair Prices, Zero Middlemen.</p>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="comparison-section">
+        <div class="comparison-header">
+            <h2>How AgriConnect Changes the Supply Chain</h2>
+            <p>Removing middlemen and connecting farmers directly with restaurants.</p>
+        </div>
+
+        <div class="flows-container">
+            <!-- Problem Flow -->
+            <div class="flow-row problem-flow">
+                <div class="flow-label">Traditional Supply Chain</div>
+                <div class="flow-diagram">
+                    <div class="flow-item">
+                        <div class="flow-item-icon">🚜</div>
+                        <div class="flow-item-label">Farmers</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-item">
+                        <div class="flow-item-icon">🧑‍💼</div>
+                        <div class="flow-item-label">Middlemen</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-item">
+                        <div class="flow-item-icon">🏪</div>
+                        <div class="flow-item-label">Market</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-item">
+                        <div class="flow-item-icon">🍽️</div>
+                        <div class="flow-item-label">Restaurants</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Solution Flow -->
+            <div class="flow-row solution-flow">
+                <div class="flow-label">Direct Farm-to-Restaurant Supply</div>
+                <div class="flow-diagram">
+                    <div class="flow-item">
+                        <div class="flow-item-icon">🚜</div>
+                        <div class="flow-item-label">Farmers</div>
+                    </div>
+                    <div class="flow-arrow">➜</div>
+                    <div class="flow-item platform-card">
+                        <div class="flow-item-icon">🌱</div>
+                        <div class="flow-item-label"><strong>AgriConnect<br>Platform</strong></div>
+                    </div>
+                    <div class="flow-arrow">➜</div>
+                    <div class="flow-item">
+                        <div class="flow-item-icon">🍽️</div>
+                        <div class="flow-item-label">Restaurants</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Join the Future of Agriculture</h2>
+        <p>Start connecting directly and build a sustainable supply chain today.</p>
+        <div class="cta-buttons">
+            <a href="{% url 'register_farmer' %}" class="btn btn-farmer">
+                👨‍🌾 Register as Farmer
+            </a>
+            <a href="{% url 'register_restaurant' %}" class="btn btn-restaurant">
+                🍽️ Register as Restaurant
+            </a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <h2>Why Choose AgriConnect?</h2>
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="icon">🤝</div>
+                <h3>Direct Connection</h3>
+                <p>Connect farmers and restaurants directly without middlemen, ensuring better prices for both.</p>
+            </div>
+            <div class="feature-item">
+                <div class="icon">🥬</div>
+                <h3>Fresh Produce</h3>
+                <p>Get farm-fresh vegetables, fruits, and grains delivered straight from local farms.</p>
+            </div>
+            <div class="feature-item">
+                <div class="icon">💰</div>
+                <h3>Fair Pricing</h3>
+                <p>Farmers get better returns, restaurants get competitive prices. Win-win for everyone!</p>
+            </div>
+            <div class="feature-item">
+                <div class="icon">📱</div>
+                <h3>Easy to Use</h3>
+                <p>Simple interface to list produce, browse inventory, and place orders in minutes.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="landing-footer">
+        <p>🌾 AgriConnect - Bridging Farmers and Restaurants | © 2026 All Rights Reserved</p>
+    </footer>
+</body>
+
+</html>

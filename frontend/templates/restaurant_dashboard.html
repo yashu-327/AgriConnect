@@ -1,0 +1,1326 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Dashboard - AgriConnect</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>"> {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5dc;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #2d5a27 0%, #4a7c43 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo span {
+            color: #90ee90;
+        }
+        
+
+        
+        /* Profile Dropdown */
+        
+        .profile-menu {
+            position: relative;
+        }
+        
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 120%;
+            background: white;
+            min-width: 350px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            overflow: hidden;
+        }
+        
+        .profile-dropdown.show {
+            display: block;
+        }
+        
+        .profile-dropdown-header {
+            background: linear-gradient(135deg, #2d5a27 0%, #4a7c43 100%);
+            color: white;
+            padding: 1.5rem;
+        }
+        
+        .profile-dropdown-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+        
+        .profile-dropdown-header p {
+            margin: 0.5rem 0 0 0;
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+        
+        .profile-dropdown-body {
+            padding: 1rem;
+        }
+        
+        .profile-info-item {
+            padding: 0.75rem;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: start;
+            gap: 0.75rem;
+        }
+        
+        .profile-info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .profile-info-icon {
+            font-size: 1.2rem;
+        }
+        
+        .profile-info-content {
+            flex: 1;
+        }
+        
+        .profile-info-label {
+            font-size: 0.75rem;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        
+        .profile-info-value {
+            color: #333;
+            margin-top: 0.25rem;
+            font-size: 0.95rem;
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .welcome-section {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border-left: 5px solid #e67e22;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .welcome-section h1 {
+            color: #2d5a27;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card h2 {
+            color: #2d5a27;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #90ee90;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-top: 4px solid #4a7c43;
+        }
+        
+        .stat-card.orange {
+            border-top-color: #e67e22;
+        }
+        
+        .stat-card.blue {
+            border-top-color: #3498db;
+        }
+        
+        .stat-card h3 {
+            font-size: 2rem;
+            color: #2d5a27;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .filter-section {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-controls {
+            display: grid;
+            gap: 0.9rem;
+        }
+
+        .search-row {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .search-row input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .advanced-filters {
+            display: none;
+            border-top: 1px solid #dee2e6;
+            padding-top: 1rem;
+            margin-top: 0.2rem;
+        }
+
+        .advanced-filters.show {
+            display: block;
+        }
+        
+        .filter-section h3 {
+            color: #555;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .filter-group label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .filter-group select,
+        .filter-group input {
+            padding: 0.6rem 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-request {
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .btn-request:hover {
+            transform: translateY(-1px);
+        }
+        
+        .btn-filter {
+            background: #6c757d;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-search {
+            background: #2d5a27;
+            color: white;
+            padding: 0.75rem 1.2rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-search:hover,
+        .btn-filter:hover,
+        .btn-reset:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-reset {
+            background: #495057;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        th,
+        td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background: #f8f9fa;
+            color: #2d5a27;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .status {
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .status-available {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-low {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-out {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .order-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .order-accepted {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .order-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        footer {
+            background: #2d5a27;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .empty-message {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        /* Request Modal */
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        .modal-content h3 {
+            margin-bottom: 1rem;
+            color: #2d5a27;
+        }
+        
+        .modal-content input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn-cancel {
+            background: #6c757d;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-confirm {
+            background: #e67e22;
+            color: white;
+            flex: 1;
+        }
+
+        /* Restaurant Home Mode */
+        .restaurant-home {
+            max-width: 1100px;
+            margin: 2rem auto 3rem;
+            padding: 0 1rem;
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .hero-card {
+            background: linear-gradient(135deg, #f3fbf1 0%, #e6f5df 100%);
+            border: 1px solid #cfe8c6;
+            border-left: 6px solid #3d7a37;
+            border-radius: 18px;
+            padding: 2rem;
+            box-shadow: 0 10px 24px rgba(38, 75, 33, 0.08);
+        }
+
+        .hero-card h1 {
+            color: #255622;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            margin-bottom: 0.75rem;
+            line-height: 1.2;
+        }
+
+        .hero-card p {
+            color: #355e34;
+            font-size: 1.05rem;
+            max-width: 760px;
+        }
+
+        .intro-card {
+            background: #ffffff;
+            border: 1px solid #dde7d8;
+            border-radius: 14px;
+            padding: 1.2rem 1.3rem;
+            box-shadow: 0 6px 14px rgba(38, 75, 33, 0.06);
+        }
+
+        .intro-card p {
+            color: #3f4e3f;
+            line-height: 1.7;
+        }
+
+        .section-title {
+            color: #255622;
+            margin-bottom: 0.85rem;
+            font-size: 1.35rem;
+        }
+
+        .feature-grid-home {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .feature-card-home {
+            background: #fff;
+            border: 1px solid #dde7d8;
+            border-radius: 14px;
+            padding: 1.2rem;
+            box-shadow: 0 8px 18px rgba(38, 75, 33, 0.07);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .feature-card-home:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 22px rgba(38, 75, 33, 0.11);
+        }
+
+        .feature-icon-home {
+            font-size: 1.6rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .feature-card-home h3 {
+            color: #2f5f2c;
+            margin-bottom: 0.35rem;
+            font-size: 1.06rem;
+        }
+
+        .feature-card-home p {
+            color: #4d5a4d;
+            font-size: 0.95rem;
+        }
+
+        .actions-wrap {
+            background: #fff;
+            border: 1px solid #dde7d8;
+            border-radius: 14px;
+            padding: 1.2rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .action-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 0.7rem 1.1rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 14px rgba(38, 75, 33, 0.15);
+        }
+
+        .action-primary {
+            background: #3f7d39;
+            color: #fff;
+        }
+
+        .action-secondary {
+            background: #d9ecd3;
+            color: #2d6028;
+        }
+
+        .action-tertiary {
+            background: #f3f7ef;
+            color: #2d6028;
+            border: 1px solid #cfe0ca;
+        }
+
+        .benefits-wrap {
+            background: #ffffff;
+            border: 1px solid #dde7d8;
+            border-radius: 14px;
+            padding: 1.2rem;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.9rem;
+        }
+
+        .benefit-card {
+            background: #f9fdf7;
+            border: 1px solid #d9e8d4;
+            border-radius: 12px;
+            padding: 1rem;
+            transition: background 0.2s ease;
+        }
+
+        .benefit-card:hover {
+            background: #f0f8ec;
+        }
+
+        .benefit-card h4 {
+            color: #2f5f2c;
+            margin-bottom: 0.3rem;
+            font-size: 1rem;
+        }
+
+        .benefit-card p {
+            color: #4d5a4d;
+            font-size: 0.93rem;
+        }
+
+        .crop-image {
+            width: 64px;
+            height: 64px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .crop-image-placeholder {
+            width: 64px;
+            height: 64px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            border: 1px dashed #bbb;
+            color: #777;
+            font-size: 0.8rem;
+            background: #fafafa;
+        }
+
+        .crop-card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.25rem;
+        }
+
+        .crop-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .crop-card-image-wrap {
+            width: 100%;
+            height: 180px;
+            background: #f6f6f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .crop-card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .crop-card-placeholder {
+            color: #888;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .crop-card-body {
+            padding: 1rem;
+            display: grid;
+            gap: 0.4rem;
+        }
+
+        .crop-card-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2d5a27;
+            margin: 0;
+        }
+
+        .crop-card-meta {
+            font-size: 0.9rem;
+            color: #555;
+            margin: 0;
+        }
+
+        .crop-card-price {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #2e7d32;
+            margin-top: 0.2rem;
+        }
+
+        .crop-card-footer {
+            margin-top: 0.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+        .crop-status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.65rem;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .crop-status-instock {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .crop-status-out {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .crop-request-btn {
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 0.45rem 0.9rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .crop-request-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(230, 126, 34, 0.28);
+        }
+
+        .crop-request-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .feature-grid-home,
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .crop-card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .crop-card-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            🌾 Agri<span>Connect</span>
+        </div>
+        <nav>
+            <ul>
+                <li class="{% if request.resolver_match.url_name == 'restaurant_home' %}active{% endif %}"><a href="{% url 'restaurant_home' %}">Home</a></li>
+                <li class="{% if request.resolver_match.url_name == 'restaurant_dashboard' %}active{% endif %}"><a href="{% url 'restaurant_dashboard' %}">My Dashboard</a></li>
+                <li class="profile-menu">
+                    <a href="#" onclick="toggleProfileDropdown(event)">
+                        Profile
+                    </a>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="profile-dropdown-header">
+                            <h3>{{ request.user.first_name }} {{ request.user.last_name }}</h3>
+                            <p>🍽️ Restaurant Account</p>
+                        </div>
+                        <div class="profile-dropdown-body">
+                            <div class="profile-info-item">
+                                <div class="profile-info-icon">👤</div>
+                                <div class="profile-info-content">
+                                    <div class="profile-info-label">Username</div>
+                                    <div class="profile-info-value">{{ request.user.username }}</div>
+                                </div>
+                            </div>
+                            <div class="profile-info-item">
+                                <div class="profile-info-icon">📧</div>
+                                <div class="profile-info-content">
+                                    <div class="profile-info-label">Email</div>
+                                    <div class="profile-info-value">{{ request.user.email }}</div>
+                                </div>
+                            </div>
+                            <div class="profile-info-item">
+                                <div class="profile-info-icon">📱</div>
+                                <div class="profile-info-content">
+                                    <div class="profile-info-label">Phone</div>
+                                    <div class="profile-info-value">{{ request.user.phone|default:"Not provided" }}</div>
+                                </div>
+                            </div>
+                            <div class="profile-info-item">
+                                <div class="profile-info-icon">🍽️</div>
+                                <div class="profile-info-content">
+                                    <div class="profile-info-label">Restaurant Name</div>
+                                    <div class="profile-info-value">{{ request.user.restaurant_profile.restaurant_name }}</div>
+                                </div>
+                            </div>
+                            <div class="profile-info-item">
+                                <div class="profile-info-icon">🏪</div>
+                                <div class="profile-info-content">
+                                    <div class="profile-info-label">Restaurant Type</div>
+                                    <div class="profile-info-value">{{ request.user.restaurant_profile.get_restaurant_type_display }}</div>
+                                </div>
+                            </div>
+                            <div class="profile-info-item">
+                                <div class="profile-info-icon">📍</div>
+                                <div class="profile-info-content">
+                                    <div class="profile-info-label">Address</div>
+                                    <div class="profile-info-value">{{ request.user.restaurant_profile.address }}</div>
+                                </div>
+                            </div>
+                            <div class="profile-info-item">
+                                <div class="profile-info-icon">🧾</div>
+                                <div class="profile-info-content">
+                                    <div class="profile-info-label">GST Number</div>
+                                    <div class="profile-info-value">{{ request.user.restaurant_profile.gst_number|default:"Not provided" }}</div>
+                                </div>
+                            </div>
+                            <div class="profile-info-item">
+                                <div class="profile-info-icon">📅</div>
+                                <div class="profile-info-content">
+                                    <div class="profile-info-label">Member Since</div>
+                                    <div class="profile-info-value">{{ request.user.date_joined|date:"F d, Y" }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li><a href="#" onclick="showLogoutModal()">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Display messages -->
+        {% if messages %} {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %} {% endif %}
+
+        {% if home_mode %}
+        <section class="restaurant-home">
+            <div class="hero-card">
+                <h1>Welcome to AgriConnect, {{ request.user.first_name|default:request.user.username }}!</h1>
+                <p>Connect directly with local farmers and source fresh produce for your restaurant.</p>
+            </div>
+
+            <div class="intro-card">
+                <p>Restaurants can browse fresh crops, request products, and connect with nearby farmers to build a reliable and sustainable supply chain.</p>
+            </div>
+
+            <section>
+                <h2 class="section-title">Restaurant Features</h2>
+                <div class="feature-grid-home">
+                    <article class="feature-card-home">
+                        <div class="feature-icon-home">🥬</div>
+                        <h3>Browse Fresh Produce</h3>
+                        <p>Explore available crops by type, quantity, and freshness to match your kitchen needs.</p>
+                    </article>
+                    <article class="feature-card-home">
+                        <div class="feature-icon-home">🤝</div>
+                        <h3>Connect with Farmers</h3>
+                        <p>Build direct relationships with local growers and simplify your sourcing process.</p>
+                    </article>
+                    <article class="feature-card-home">
+                        <div class="feature-icon-home">📦</div>
+                        <h3>Manage Supply Requests</h3>
+                        <p>Track requests in one place and stay organized while planning daily procurement.</p>
+                    </article>
+                </div>
+            </section>
+            <!-- Section: Available Produce -->
+            <section class="card">
+                <h2>🥬 Available Produce from Farmers</h2>
+
+                <div class="filter-section">
+                    <h3>Search Crops</h3>
+                    <form method="get">
+                        <div class="search-controls">
+                            <div class="search-row">
+                                <input type="text" id="search" name="search" value="{{ filters.search }}" placeholder="Search crops, farmers, location...">
+                                <button type="submit" class="btn btn-search">Search</button>
+                                <button type="button" id="filterToggleBtn" class="btn btn-filter" onclick="toggleAdvancedFilters()">Filters</button>
+                            </div>
+
+                            <div id="advancedFilters" class="advanced-filters {% if filters.location or filters.category or filters.status or filters.min_price or filters.max_price or filters.sort_by != 'newest' %}show{% endif %}">
+                                <div class="filter-grid">
+                                    <div class="filter-group">
+                                        <label for="location">Location</label>
+                                        <select id="location" name="location">
+                                            <option value="">All Locations</option>
+                                            {% for location in location_options %}
+                                            <option value="{{ location }}" {% if filters.location == location %}selected{% endif %}>{{ location }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="filter-group">
+                                        <label for="category">Category</label>
+                                        <select id="category" name="category">
+                                            <option value="">All Categories</option>
+                                            {% for value, label in category_options %}
+                                            <option value="{{ value }}" {% if filters.category == value %}selected{% endif %}>{{ label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                    <div class="filter-group">
+                                        <label for="status">Availability</label>
+                                        <select id="status" name="status">
+                                            <option value="">All</option>
+                                            <option value="available" {% if filters.status == 'available' %}selected{% endif %}>Available</option>
+                                            <option value="pending" {% if filters.status == 'pending' %}selected{% endif %}>Low Stock</option>
+                                            <option value="sold" {% if filters.status == 'sold' %}selected{% endif %}>Sold Out</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="filter-group">
+                                        <label for="min_price">Min Price (₹/kg)</label>
+                                        <input type="number" id="min_price" name="min_price" min="0" step="0.01" value="{{ filters.min_price }}" placeholder="0">
+                                    </div>
+
+                                    <div class="filter-group">
+                                        <label for="max_price">Max Price (₹/kg)</label>
+                                        <input type="number" id="max_price" name="max_price" min="0" step="0.01" value="{{ filters.max_price }}" placeholder="1000">
+                                    </div>
+
+                                    <div class="filter-group">
+                                        <label for="sort_by">Sort By</label>
+                                        <select id="sort_by" name="sort_by">
+                                            <option value="newest" {% if filters.sort_by == 'newest' %}selected{% endif %}>Newest</option>
+                                            <option value="price_low" {% if filters.sort_by == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                                            <option value="price_high" {% if filters.sort_by == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                                            <option value="name_asc" {% if filters.sort_by == 'name_asc' %}selected{% endif %}>Name: A to Z</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="filter-group">
+                                        <button type="submit" class="btn btn-filter">Apply</button>
+                                    </div>
+
+                                    <div class="filter-group">
+                                        <a href="{% if home_mode %}{% url 'restaurant_home' %}{% else %}{% url 'restaurant_dashboard' %}{% endif %}" class="btn btn-reset">Clear</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <p style="color: #666; margin-bottom: 1rem;">Showing {{ total_produce }} crop{% if total_produce != 1 %}s{% endif %}.</p>
+
+                <div class="crop-card-grid">
+                    {% for produce in available_produce %}
+                    <article class="crop-card">
+                        <div class="crop-card-image-wrap">
+                            {% if produce.crop_image %}
+                            <img src="{{ produce.crop_image.url }}" alt="{{ produce.name }}" class="crop-card-image">
+                            {% else %}
+                            <div class="crop-card-placeholder">No Image</div>
+                            {% endif %}
+                        </div>
+                        <div class="crop-card-body">
+                            <h3 class="crop-card-name">{{ produce.name }}</h3>
+                            <p class="crop-card-meta">Category: {{ produce.get_category_display }}</p>
+                            <p class="crop-card-meta">Farmer: {{ produce.farmer.username }}</p>
+                            <p class="crop-card-meta">Location: {{ produce.farmer.get_farmer_location|default:"N/A" }}</p>
+                            <p class="crop-card-price">₹{{ produce.price_per_kg }} / kg</p>
+                            <p class="crop-card-meta">Available Qty: {{ produce.quantity }} kg</p>
+                            <div class="crop-card-footer">
+                                {% if produce.quantity > 0 and produce.status != 'sold' %}
+                                <span class="crop-status-badge crop-status-instock">In Stock</span>
+                                <button class="crop-request-btn" onclick="openModal('{{ produce.id }}', '{{ produce.name }}', '{{ produce.quantity }}', '{{ produce.price_per_kg }}')">Request</button>
+                                {% else %}
+                                <span class="crop-status-badge crop-status-out">Out of Stock</span>
+                                <button class="crop-request-btn" disabled>Request</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </article>
+                    {% empty %}
+                    <div class="empty-message">No produce available at the moment. Check back later!</div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            {% comment %} <section class="actions-wrap">
+                <h2 class="section-title">Quick Actions</h2>
+                <div class="action-buttons">
+                    <a class="action-btn action-primary" href="{% url 'restaurant_dashboard' %}">Browse Crops</a>
+                    <a class="action-btn action-secondary" href="{% url 'restaurant_dashboard' %}">Go to Dashboard</a>
+                    <a class="action-btn action-tertiary" href="{% url 'restaurant_dashboard' %}">View Profile</a>
+                </div>
+            </section> {% endcomment %}
+
+            <section class="benefits-wrap">
+                <h2 class="section-title">Why Restaurants Use AgriConnect</h2>
+                <div class="benefits-grid">
+                    <article class="benefit-card">
+                        <h4>Fresh Produce</h4>
+                        <p>Get seasonal ingredients quickly from nearby farms to improve food quality.</p>
+                    </article>
+                    <article class="benefit-card">
+                        <h4>Better Pricing</h4>
+                        <p>Reduce unnecessary middle costs by sourcing directly from producers.</p>
+                    </article>
+                    <article class="benefit-card">
+                        <h4>Direct Farmer Access</h4>
+                        <p>Communicate with farmers for scheduling, quantities, and long-term supply planning.</p>
+                    </article>
+                </div>
+            </section>
+
+
+        </section>
+        {% else %}
+
+        <section class="welcome-section">
+            <h1>🍽️ Welcome, {{ request.user.restaurant_profile.restaurant_name }}!</h1>
+            <p>Browse fresh produce from local farmers and request supplies directly.</p>
+        </section>
+
+        <!-- Section: Fresh Produce Available -->
+        <section class="card">
+            <h2>🥬 Fresh Produce Available</h2>
+            <p style="color: #666; margin-bottom: 1rem;">Browse and request fresh produce from local farmers</p>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Crop Name</th>
+                            <th>Farmer Name</th>
+                            <th>Location</th>
+                            <th>Price per kg (₹)</th>
+                            <th>Available Quantity</th>
+                            <th>Stock Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for produce in available_produce %}
+                        <tr>
+                            <td><strong>{{ produce.name }}</strong></td>
+                            <td>{{ produce.farmer.first_name }}</td>
+                            <td>📍 {{ produce.farmer.farmer_profile.location|default:"Location not specified" }}</td>
+                            <td>₹{{ produce.price_per_kg }}</td>
+                            <td>{{ produce.quantity }} kg</td>
+                            <td>
+                                {% if produce.quantity > 50 %}
+                                    <span style="background: #d4edda; color: #155724; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem;">✓ In Stock</span>
+                                {% elif produce.quantity > 10 %}
+                                    <span style="background: #fff3cd; color: #856404; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem;">⚠ Limited</span>
+                                {% else %}
+                                    <span style="background: #f8d7da; color: #721c24; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem;">⚠ Low Stock</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button class="btn btn-request" onclick="openModal('{{ produce.id }}', '{{ produce.name }}', {{ produce.quantity }}, {{ produce.price_per_kg }})">Request</button>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="empty-message">No produce available at the moment. Check back soon!</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section: Profile Information -->
+        <section class="card">
+            <h2>👤 My Restaurant Profile</h2>
+            <div class="profile-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                <div class="profile-item">
+                    <label style="font-weight: 600; color: #555; font-size: 0.85rem; text-transform: uppercase;">Restaurant Name</label>
+                    <p style="font-size: 1.1rem; color: #333; margin-top: 0.25rem;">🍽️ {{ request.user.restaurant_profile.restaurant_name }}</p>
+                </div>
+                <div class="profile-item">
+                    <label style="font-weight: 600; color: #555; font-size: 0.85rem; text-transform: uppercase;">Owner Name</label>
+                    <p style="font-size: 1.1rem; color: #333; margin-top: 0.25rem;">{{ request.user.first_name }}</p>
+                </div>
+                <div class="profile-item">
+                    <label style="font-weight: 600; color: #555; font-size: 0.85rem; text-transform: uppercase;">Restaurant Type</label>
+                    <p style="font-size: 1.1rem; color: #333; margin-top: 0.25rem;">{{ request.user.restaurant_profile.get_restaurant_type_display }}</p>
+                </div>
+                <div class="profile-item">
+                    <label style="font-weight: 600; color: #555; font-size: 0.85rem; text-transform: uppercase;">Email Address</label>
+                    <p style="font-size: 1.1rem; color: #333; margin-top: 0.25rem;">{{ request.user.email }}</p>
+                </div>
+                <div class="profile-item">
+                    <label style="font-weight: 600; color: #555; font-size: 0.85rem; text-transform: uppercase;">Phone Number</label>
+                    <p style="font-size: 1.1rem; color: #333; margin-top: 0.25rem;">{{ request.user.phone|default:"Not provided" }}</p>
+                </div>
+                <div class="profile-item">
+                    <label style="font-weight: 600; color: #555; font-size: 0.85rem; text-transform: uppercase;">Address</label>
+                    <p style="font-size: 1.1rem; color: #333; margin-top: 0.25rem;">📍 {{ request.user.restaurant_profile.address }}</p>
+                </div>
+                <div class="profile-item">
+                    <label style="font-weight: 600; color: #555; font-size: 0.85rem; text-transform: uppercase;">GST Number</label>
+                    <p style="font-size: 1.1rem; color: #333; margin-top: 0.25rem;">{{ request.user.restaurant_profile.gst_number|default:"Not provided" }}</p>
+                </div>
+                <div class="profile-item">
+                    <label style="font-weight: 600; color: #555; font-size: 0.85rem; text-transform: uppercase;">Member Since</label>
+                    <p style="font-size: 1.1rem; color: #333; margin-top: 0.25rem;">{{ request.user.date_joined|date:"F d, Y" }}</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: My Orders -->
+        <section class="card">
+            <h2>📋 All My Orders</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Farmer</th>
+                            <th>Produce</th>
+                            <th>Quantity (kg)</th>
+                            <th>Total (₹)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in my_orders %}
+                        <tr>
+                            <td>#ORD-{{ order.id }}</td>
+                            <td>👨‍🌾 {{ order.farmer.first_name }}</td>
+                            <td>{{ order.produce.name }}</td>
+                            <td>{{ order.quantity_requested }}</td>
+                            <td>₹{{ order.total_price }}</td>
+                            <td>
+                                {% if order.status == 'pending' %}
+                                <span class="status order-pending">⏳ Pending</span> {% elif order.status == 'accepted' %}
+                                <span class="status order-accepted">✓ Accepted</span> {% else %}
+                                <span class="status order-rejected">✗ Rejected</span> {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="empty-message">No orders yet. Request supplies from farmers above!</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        {% endif %}
+    </main>
+
+    <!-- Request Modal -->
+    <div id="requestModal" class="modal">
+        <div class="modal-content">
+            <h3>📦 Request Supply</h3>
+            <p id="modal-produce-info"></p>
+            <form id="request-form" method="post" action="">
+                {% csrf_token %}
+                <input type="number" id="request-quantity" name="quantity" placeholder="Enter quantity (kg)" min="1" step="0.01" required>
+                <p id="modal-total" style="font-weight: bold; margin-bottom: 1rem;"></p>
+                <div class="modal-buttons">
+                    <button type="button" class="btn btn-cancel" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-confirm">Confirm Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <p>🌾 AgriConnect - Bridging Farmers and Restaurants | © 2026 All Rights Reserved</p>
+    </footer>
+
+    <script>
+        let currentPrice = 0;
+
+        function openModal(produceId, produceName, maxQty, price) {
+            // Convert string arguments to appropriate types
+            const id = parseInt(produceId);
+            const max = parseFloat(maxQty);
+            const pricePerKg = parseFloat(price);
+
+            document.getElementById('requestModal').style.display = 'block';
+            document.getElementById('modal-produce-info').textContent = `${produceName} - ₹${pricePerKg}/kg (Max: ${max} kg)`;
+            document.getElementById('request-form').action = `/restaurant/request/${id}/`;
+            document.getElementById('request-quantity').max = max;
+            document.getElementById('request-quantity').value = '';
+            currentPrice = pricePerKg;
+            updateTotal();
+        }
+
+        function closeModal() {
+            document.getElementById('requestModal').style.display = 'none';
+        }
+
+        function updateTotal() {
+            const qty = document.getElementById('request-quantity').value || 0;
+            const total = (qty * currentPrice).toFixed(2);
+            document.getElementById('modal-total').textContent = `Total: ₹${total}`;
+        }
+
+        const requestQuantityInput = document.getElementById('request-quantity');
+        if (requestQuantityInput) {
+            requestQuantityInput.addEventListener('input', updateTotal);
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('requestModal')) {
+                closeModal();
+            }
+            if (event.target == document.getElementById('logoutModal')) {
+                closeLogoutModal();
+            }
+        }
+
+        // Logout modal functions
+        function showLogoutModal() {
+            document.getElementById('logoutModal').style.display = 'block';
+        }
+
+        function closeLogoutModal() {
+            document.getElementById('logoutModal').style.display = 'none';
+        }
+
+        function toggleProfileDropdown(event) {
+            event.preventDefault();
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        function toggleAdvancedFilters() {
+            const panel = document.getElementById('advancedFilters');
+            const button = document.getElementById('filterToggleBtn');
+            if (!panel || !button) {
+                return;
+            }
+
+            panel.classList.toggle('show');
+            button.textContent = panel.classList.contains('show') ? 'Hide Filters' : 'Filters';
+        }
+
+        (function initializeFilterButtonLabel() {
+            const panel = document.getElementById('advancedFilters');
+            const button = document.getElementById('filterToggleBtn');
+            if (panel && button && panel.classList.contains('show')) {
+                button.textContent = 'Hide Filters';
+            }
+        })();
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.profile-menu')) {
+                const dropdown = document.getElementById('profileDropdown');
+                if (dropdown && dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                }
+            }
+        });
+    </script>
+
+    <!-- Logout Confirmation Modal -->
+    <div id="logoutModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+        <div style="background-color: white; margin: 15% auto; padding: 2rem; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">👋</div>
+            <h3 style="color: #2d5a27; margin-bottom: 0.5rem;">Logging Out?</h3>
+            <p style="color: #666; margin-bottom: 1.5rem;">Are you sure you want to logout from AgriConnect?</p>
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <button onclick="closeLogoutModal()" style="padding: 0.75rem 1.5rem; border: 2px solid #ddd; background: white; border-radius: 8px; font-size: 1rem; cursor: pointer; font-weight: 600;">Cancel</button>
+                <a href="{% url 'logout' %}" style="padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; border-radius: 8px; font-size: 1rem; text-decoration: none; font-weight: 600;">Yes, Logout</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
